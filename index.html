@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>โฟกัสอ่านหนังสือ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@700&family=Prompt:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f9f3e7;--card:#fff;--line:#e3d4ba;--ink:#33261c;--mute:#857361;--chip:#eddec2;--chipt:#1f4a3d;--g:#2e6152;--gt:#2e6152;--off:#ddd0b8;--sel:#f5edd9;--gold:#c79438;--f:Prompt,'Noto Sans Thai',system-ui,sans-serif;--s:'Noto Serif Thai',Georgia,serif;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#16201c;--card:#212e28;--line:#34453d;--ink:#f3ebda;--mute:#a99f8c;--chip:#2f4038;--chipt:#cfe9df;--gt:#7cc4ab;--off:#3a4a42;--sel:#1d2b25}}
+:root[data-theme="dark"]{--bg:#16201c;--card:#212e28;--line:#34453d;--ink:#f3ebda;--mute:#a99f8c;--chip:#2f4038;--chipt:#cfe9df;--gt:#7cc4ab;--off:#3a4a42;--sel:#1d2b25}
+*{box-sizing:border-box;margin:0}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{height:100%;background:var(--bg);color:var(--ink);font-family:var(--f);-webkit-tap-highlight-color:transparent}
+button{font-family:var(--f);color:inherit;cursor:pointer}
+#app{max-width:430px;height:100%;margin:auto;display:flex;flex-direction:column}
+.scr{display:none;flex:1;overflow-y:auto;padding:56px 24px 16px;flex-direction:column;gap:14px}
+.scr.on{display:flex}
+h1{font:700 28px/1.4 var(--s)}
+.lbl{font-size:13px;font-weight:600;color:var(--mute);margin-bottom:8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px}
+.seg{display:flex;gap:4px;padding:4px;background:var(--card);border-radius:24px}
+.seg button{flex:1;border:0;background:none;border-radius:20px;padding:8px 16px;font:500 14px/1.4 var(--f);color:var(--mute)}
+.seg .on{background:var(--g);color:#fff;font-weight:600}
+svg.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+nav{display:none;background:var(--card);border-radius:24px 24px 0 0;box-shadow:0 -4px 16px rgba(0,0,0,.06);padding:10px 16px 20px}
+nav.on{display:flex}
+nav button{flex:1;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:4px;font:500 12px/1.4 var(--f);color:var(--mute)}
+nav button.on{color:var(--gt);font-weight:600}
+#onb{padding-top:72px;gap:16px}
+.sub{font-size:15px;line-height:1.4;color:var(--mute)}
+.opt{display:flex;gap:12px;align-items:center;width:100%;padding:16px;border-radius:20px;border:1px solid var(--line);background:var(--card);text-align:left}
+.opt.on{background:var(--sel);border:2px solid var(--g);padding:15px}
+.ic{width:48px;height:48px;flex:none;border-radius:14px;background:var(--chip);color:var(--gt);display:grid;place-items:center}
+.opt.on .ic{background:var(--g);color:#fff}
+.opt div:nth-child(2){flex:1}
+.opt b{display:block;font-size:17px;font-weight:600;line-height:1.4}
+.opt small{font-size:13px;line-height:1.4;color:var(--mute)}
+.rad{width:24px;height:24px;flex:none;border-radius:50%;border:2px solid #c7b89e;display:grid;place-items:center}
+.opt.on .rad{background:var(--g);border-color:var(--g)}
+.opt.on .rad::after{content:"";width:8px;height:8px;border-radius:50%;background:#fff}
+.go{margin-top:auto;padding-top:16px}
+.go button{width:100%;border:0;border-radius:28px;background:var(--g);color:#fff;padding:16px 24px;font:600 17px/1.4 var(--f);box-shadow:0 8px 16px rgba(46,97,82,.35)}
+.hd{display:flex;justify-content:space-between;align-items:center}
+.hd small{display:block;font-size:14px;color:var(--mute)}
+.hd b{font:700 24px/1.4 var(--s)}
+.pill{background:var(--chip);color:var(--chipt);border-radius:16px;padding:6px 14px;font-size:13px;font-weight:600}
+.ring{position:relative;width:280px;height:280px;flex:none;margin:6px auto 0}
+.ring svg{position:absolute;inset:0}
+.t{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.t b{font:700 64px/1.2 var(--s);font-variant-numeric:tabular-nums}
+.t span{font-size:15px;font-weight:500;color:var(--mute)}
+.task{align-self:center;background:var(--card);border-radius:24px;padding:10px 16px;display:flex;gap:8px;align-items:center;font-size:14px;font-weight:500}
+.task i{width:10px;height:10px;border-radius:50%;background:var(--gold)}
+.task span{outline:none;min-width:2em}
+.ctl{display:flex;gap:24px;align-items:center;justify-content:center;margin-top:4px}
+.rb{width:56px;height:56px;border-radius:28px;background:var(--card);border:1px solid var(--line);display:grid;place-items:center}
+.rb svg{width:22px;height:22px}
+.pb{width:84px;height:84px;border-radius:42px;background:var(--g);color:#fff;border:0;box-shadow:0 8px 12px rgba(46,97,82,.35);display:grid;place-items:center}
+.pb svg{width:32px;height:32px}
+.row{display:flex;justify-content:space-between;align-items:center;min-height:52px;padding:6px 16px;font-size:15px;font-weight:500;border-top:1px solid var(--line)}
+.row:first-child{border:0}
+.chipb{border:0;background:var(--chip);color:var(--chipt);border-radius:14px;padding:4px 14px;font:600 14px/1.4 var(--f)}
+.tg{width:48px;height:28px;border-radius:14px;background:var(--off);border:0;position:relative;flex:none}
+.tg::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:left .2s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.tg.on{background:var(--g)}
+.tg.on::after{left:23px}
+.link{border:0;background:none;display:flex;align-items:center;gap:4px;font:500 14px var(--f);color:var(--mute)}
+.link svg{width:18px;height:18px}
+.sum{display:flex;gap:12px}
+.sum .card{flex:1;padding:16px}
+.sum small{font-size:13px;color:var(--mute)}
+.sum b{display:block;font:700 32px/1.2 var(--s)}
+.sum em{font:500 14px var(--f);color:var(--mute);margin-left:6px}
+.chart{padding:16px;display:flex;flex-direction:column;gap:16px}
+.chart header{display:flex;justify-content:space-between;font-size:13px;color:var(--mute)}
+.chart header b{font-size:15px;font-weight:600;color:var(--ink)}
+.bars{display:flex;justify-content:space-between;align-items:flex-end;height:150px}
+.bar{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--mute)}
+.bar i{display:block;width:30px;border-radius:10px;background:var(--chip)}
+.bar.hi{color:var(--gt);font-weight:700}
+.bar.hi i{background:var(--gt)}
+.streak{background:var(--g);color:#fff;border-radius:24px;padding:20px;display:flex;flex-direction:column;gap:8px}
+.streak b{font:700 18px/1.4 var(--s)}
+.streak p{font-size:13px}
+.trk{height:10px;border-radius:5px;background:rgba(255,255,255,.3)}
+.trk i{display:block;height:10px;border-radius:5px;background:#fff}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="book" viewBox="0 0 24 24"><path d="M3 5.5C3 4.7 3.7 4 4.5 4H11v15H4.5c-.8 0-1.5-.7-1.5-1.5z"/><path d="M21 5.5c0-.8-.7-1.5-1.5-1.5H13v15h6.5c.8 0 1.5-.7 1.5-1.5z"/></symbol>
+<symbol id="case" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7M3 13h18"/></symbol>
+<symbol id="sld" viewBox="0 0 24 24"><path d="M6 3v18M12 3v18M18 3v18M4 8h4M10 15h4M16 9h4" stroke-width="2"/></symbol>
+<symbol id="clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+<symbol id="chart" viewBox="0 0 24 24"><path d="M4 20h16M7 20V10M12 20V5M17 20v-7"/></symbol>
+<symbol id="reset" viewBox="0 0 24 24"><path d="M4.5 12a7.5 7.5 0 1 0 2.4-5.5M4 4v4h4"/></symbol>
+<symbol id="pause" viewBox="0 0 24 24"><rect x="6" y="4.5" width="4" height="15" rx="1.2" fill="currentColor" stroke="none"/><rect x="14" y="4.5" width="4" height="15" rx="1.2" fill="currentColor" stroke="none"/></symbol>
+<symbol id="play" viewBox="0 0 24 24"><path d="M7 4.8v14.4a1 1 0 0 0 1.5.9l11-7.2a1 1 0 0 0 0-1.7L8.5 3.9A1 1 0 0 0 7 4.8z" fill="currentColor" stroke="none"/></symbol>
+<symbol id="skip" viewBox="0 0 24 24"><path d="M6 5.5v13l9-6.5z" fill="currentColor"/><path d="M18 5v14"/></symbol>
+<symbol id="chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+</defs></svg>
+<div id="app">
+<section class="scr on" id="onb">
+<svg width="80" height="80" viewBox="0 0 80 80"><rect x="16" y="7" width="58" height="72" rx="6" fill="#fffcf5" stroke="#e3d4ba" stroke-width="2"/><rect x="8" y="3" width="60" height="74" rx="8" fill="#2e6152"/><rect x="8" y="3" width="12" height="74" rx="5" fill="#1f4a3d"/><rect x="30" y="24" width="30" height="6" rx="3" fill="#c79438"/><rect x="30" y="36" width="22" height="4" rx="2" fill="#c79438" opacity=".7"/><rect x="52" y="3" width="10" height="26" rx="3" fill="#c79438"/></svg>
+<h1>คุณจะใช้โฟกัสกับอะไร?</h1>
+<p class="sub">เลือกสไตล์ที่ใช่สำหรับคุณ เปลี่ยนทีหลังได้เสมอ</p>
+<div id="opts" style="display:flex;flex-direction:column;gap:12px">
+<button class="opt"><span class="ic"><svg class="i"><use href="#book"/></svg></span><div><b>อ่านหนังสือ / เรียน</b><small>โทนอบอุ่นแบบกระดาษ มีแต้มสะสมทุกบท</small></div><span class="rad"></span></button>
+<button class="opt"><span class="ic"><svg class="i"><use href="#case"/></svg></span><div><b>ทำงาน</b><small>เรียบง่าย เน้นดูสถิติรายสัปดาห์</small></div><span class="rad"></span></button>
+<button class="opt"><span class="ic"><svg class="i"><use href="#sld"/></svg></span><div><b>ตั้งเอง</b><small>ปรับเวลาโฟกัสและพักได้อิสระ</small></div><span class="rad"></span></button>
+</div>
+<div class="go"><button id="go">เริ่มอ่านเลย</button></div>
+</section>
+
+<section class="scr" id="tmr">
+<div class="hd"><div><small id="rem"></small><b>อ่านหนังสือ</b></div><span class="pill" id="chp"></span></div>
+<div class="seg" id="modes"><button>อ่าน</button><button>พักสั้น</button><button>พักยาว</button></div>
+<div class="ring">
+<svg viewBox="0 0 280 280"><circle cx="140" cy="140" r="134" fill="none" stroke="var(--chip)" stroke-width="12"/><circle id="pr" cx="140" cy="140" r="134" fill="none" stroke="var(--gt)" stroke-width="12" stroke-linecap="round" transform="rotate(-90 140 140)"/><circle id="kn" r="11" fill="var(--card)" stroke="var(--gt)" stroke-width="4"/></svg>
+<div class="t"><b id="tm"></b><span id="lb"></span></div>
+</div>
+<div class="task"><i></i><div id="tk"></div></div>
+<div class="ctl"><button class="rb" id="rs" aria-label="รีเซ็ต"><svg class="i"><use href="#reset"/></svg></button><button class="pb" id="pp" aria-label="เริ่ม/หยุด"></button><button class="rb" id="sk" aria-label="ข้าม"><svg class="i"><use href="#skip"/></svg></button></div>
+</section>
+
+<section class="scr" id="set">
+<h1>ตั้งค่า</h1>
+<div><p class="lbl">เวลา</p><div class="card">
+<div class="row">อ่าน<button class="chipb" data-k="r"></button></div>
+<div class="row">พักสั้น<button class="chipb" data-k="s"></button></div>
+<div class="row">พักยาว<button class="chipb" data-k="l"></button></div>
+<div class="row">บทก่อนพักยาว<button class="chipb" data-k="n"></button></div>
+</div></div>
+<div><p class="lbl">การทำงาน</p><div class="card">
+<div class="row">เริ่มช่วงพักอัตโนมัติ<button class="tg" data-t="auto" aria-label="สลับ"></button></div>
+<div class="row">เสียงแจ้งเตือน<button class="tg" data-t="snd" aria-label="สลับ"></button></div>
+<div class="row">สั่นเตือน<button class="tg" data-t="vib" aria-label="สลับ"></button></div>
+</div></div>
+<div><p class="lbl">ธีม</p><div class="card">
+<div class="row">สไตล์การใช้งาน<button class="link" id="sty"></button></div>
+<div class="row">โหมดมืด<button class="tg" data-t="dark" aria-label="สลับ"></button></div>
+</div></div>
+</section>
+
+<section class="scr" id="sta">
+<h1>สถิติ</h1>
+<div class="seg" id="per"><button>วันนี้</button><button class="on">สัปดาห์</button><button>เดือน</button></div>
+<div class="sum"><div class="card"><small>เวลาอ่านรวม</small><b><span id="sh"></span><em>ชม.</em></b></div><div class="card"><small>บทที่อ่านจบ</small><b><span id="sc"></span><em>บท</em></b></div></div>
+<div class="card chart"><header><b>เวลาอ่านรายวัน</b><span>ชั่วโมง</span></header><div class="bars" id="bars"></div></div>
+<div class="streak"><b id="skt"></b><p id="skp"></p><div class="trk"><i id="skb"></i></div></div>
+</section>
+
+<nav><button data-s="tmr" class="on"><svg class="i"><use href="#clock"/></svg>จับเวลา</button><button data-s="sta"><svg class="i"><use href="#chart"/></svg>สถิติ</button><button data-s="set"><svg class="i"><use href="#sld"/></svg>ตั้งค่า</button></nav>
+</div>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const st={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const OPT={r:[15,20,25,30,45,60],s:[3,5,10],l:[10,15,20,30],n:[2,3,4,5,6]},NAMES=['อ่านหนังสือ','ทำงาน','ตั้งเอง'],DAYS=['จ','อ','พ','พฤ','ศ','ส','อา'],GOAL=8,C=2*Math.PI*134;
+const cfg=Object.assign({r:25,s:5,l:15,n:4,auto:true,snd:true,vib:false,sty:0,subj:'ชีววิทยา'},st.get('cfg',{}));
+const save=()=>st.set('cfg',cfg);
+if(cfg.theme)document.documentElement.dataset.theme=cfg.theme;
+const dark=()=>document.documentElement.dataset.theme?document.documentElement.dataset.theme=='dark':matchMedia('(prefers-color-scheme: dark)').matches;
+const wd=()=>(new Date().getDay()+6)%7,ds=o=>{const d=new Date();d.setDate(d.getDate()-o);return d.toDateString()};
+const wk=()=>ds(wd()),mk=()=>{const d=new Date();return d.getFullYear()+'-'+d.getMonth()},f=h=>String(Math.round(h*10)/10);
+let log=st.get('log',null)||{wk:wk(),mk:mk(),d:[[2,5],[1.5,4],[2.5,5],[1,3],[2,5],[3,7],[.5,1]],mo:[12.5,30],sk:5,last:ds(1)};
+if(log.wk!==wk()){log.wk=wk();log.d=DAYS.map(()=>[0,0])}
+if(log.mk!==mk()){log.mk=mk();log.mo=[0,0]}
+const streak=()=>log.last==ds(0)||log.last==ds(1)?log.sk:0;
+function rec(){const h=cfg.r/60,d=log.d[wd()];d[0]+=h;d[1]++;log.mo[0]+=h;log.mo[1]++;if(log.last!=ds(0)){log.sk=log.last==ds(1)?log.sk+1:1;log.last=ds(0)}st.set('log',log)}
+
+function go(id){$$('.scr').forEach(e=>e.classList.toggle('on',e.id==id));$('nav').classList.toggle('on',id!='onb');$$('nav button').forEach(b=>b.classList.toggle('on',b.dataset.s==id));if(id=='sta')rSta();if(id=='set')rSet();if(id=='onb')rOpt()}
+$$('nav button').forEach(b=>b.onclick=()=>go(b.dataset.s));
+function rOpt(){$$('.opt').forEach((o,i)=>{o.classList.toggle('on',i==cfg.sty);o.onclick=()=>{cfg.sty=i;rOpt()}})}
+$('#go').onclick=()=>{save();st.set('ob',1);go('tmr')};
+
+const S={mode:0,rem:cfg.r*60,run:false,end:0,cyc:0};
+const dur=m=>cfg['rsl'[m]]*60;
+function render(){
+ const d=dur(S.mode),fr=1-S.rem/d,s=Math.ceil(S.rem),a=fr*2*Math.PI-Math.PI/2,t=log.d[wd()][1];
+ $('#tm').textContent=String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');
+ $('#lb').textContent=['ช่วงอ่าน','ช่วงพักสั้น','ช่วงพักยาว'][S.mode];
+ const pr=$('#pr');pr.style.strokeDasharray=C*fr+' '+C;pr.style.opacity=fr>.002?1:0;
+ $('#kn').setAttribute('cx',140+134*Math.cos(a));$('#kn').setAttribute('cy',140+134*Math.sin(a));
+ $('#rem').textContent='วันนี้เหลืออีก '+Math.max(0,GOAL-t)+' บท';
+ $('#chp').textContent='บทที่ '+(S.cyc+1)+'/'+cfg.n;
+ $$('#modes button').forEach((b,i)=>b.classList.toggle('on',i==S.mode));
+ $('#pp').innerHTML='<svg class="i"><use href="#'+(S.run?'pause':'play')+'"/></svg>';
+ if(document.activeElement.id!='subj')$('#tk').innerHTML=S.mode?'พักสักครู่ แล้วค่อยกลับมาอ่านต่อ':'กำลังอ่าน: <span id="subj" contenteditable="plaintext-only"></span> บทที่ '+(t+1),S.mode||($('#subj').textContent=cfg.subj,$('#subj').onblur=e=>{cfg.subj=e.target.textContent.trim()||'หนังสือ';save()},$('#subj').onkeydown=e=>{if(e.key=='Enter'){e.preventDefault();e.target.blur()}})
+}
+function setMode(m){S.mode=m;S.rem=dur(m);S.run=false;render()}
+function start(){S.end=Date.now()+S.rem*1000;S.run=true}
+function beep(){try{const c=new(window.AudioContext||window.webkitAudioContext)();[0,.3].forEach((t,i)=>{const o=c.createOscillator(),g=c.createGain();o.frequency.value=i?880:660;o.connect(g);g.connect(c.destination);g.gain.setValueAtTime(.2,c.currentTime+t);g.gain.exponentialRampToValueAtTime(.001,c.currentTime+t+.35);o.start(c.currentTime+t);o.stop(c.currentTime+t+.4)})}catch(e){}}
+function finish(){
+ if(cfg.snd)beep();if(cfg.vib&&navigator.vibrate)navigator.vibrate([200,100,200]);
+ let nx=0;if(S.mode==0){rec();S.cyc++;nx=S.cyc>=cfg.n?2:1;if(S.cyc>=cfg.n)S.cyc=0}
+ setMode(nx);if(cfg.auto)start();render()
+}
+setInterval(()=>{if(!S.run)return;S.rem=Math.max(0,(S.end-Date.now())/1000);if(S.rem<=0)finish();else render()},250);
+$('#pp').onclick=()=>{if(S.run)S.run=false;else{if(S.rem<=0)S.rem=dur(S.mode);start()}render()};
+$('#rs').onclick=()=>setMode(S.mode);
+$('#sk').onclick=()=>setMode(S.mode?0:1);
+$$('#modes button').forEach((b,i)=>b.onclick=()=>setMode(i));
+
+function rSet(){
+ ['r','s','l'].forEach(k=>$('[data-k='+k+']').textContent=cfg[k]+' นาที');$('[data-k=n]').textContent=cfg.n+' บท';
+ ['auto','snd','vib'].forEach(k=>$('[data-t='+k+']').classList.toggle('on',!!cfg[k]));
+ $('[data-t=dark]').classList.toggle('on',dark());
+ $('#sty').innerHTML=NAMES[cfg.sty]+'<svg class="i"><use href="#chev"/></svg>'
+}
+$$('.chipb').forEach(b=>b.onclick=()=>{const k=b.dataset.k,a=OPT[k];cfg[k]=a[(a.indexOf(cfg[k])+1)%a.length];if(cfg.n<=S.cyc)S.cyc=0;if(!S.run&&k!='n'&&'rsl'[S.mode]==k)S.rem=dur(S.mode);save();rSet();render()});
+$$('.tg').forEach(b=>b.onclick=()=>{const k=b.dataset.t;if(k=='dark'){const d=!dark();cfg.theme=d?'dark':'light';document.documentElement.dataset.theme=cfg.theme}else cfg[k]=!cfg[k];save();rSet()});
+$('#sty').onclick=()=>go('onb');
+
+let per=1;
+$$('#per button').forEach((b,i)=>b.onclick=()=>{per=i;$$('#per button').forEach((x,j)=>x.classList.toggle('on',i==j));rSta()});
+function rSta(){
+ const w=log.d.reduce((a,x)=>[a[0]+x[0],a[1]+x[1]],[0,0]),v=[log.d[wd()],w,log.mo][per],mx=Math.max(3,...log.d.map(x=>x[0])),sk=streak();
+ $('#sh').textContent=f(v[0]);$('#sc').textContent=v[1];
+ $('#bars').innerHTML=log.d.map((x,i)=>'<div class="bar'+(i==wd()?' hi':'')+'"><i style="height:'+Math.max(8,x[0]/mx*120)+'px"></i>'+DAYS[i]+'</div>').join('');
+ const p=Math.min(100,Math.round(w[0]/15*100));
+ $('#skt').textContent=sk?'อ่านต่อเนื่อง '+sk+' วันแล้ว':'เริ่มอ่านวันนี้เพื่อเริ่มสถิติต่อเนื่อง';
+ $('#skp').textContent='เป้าหมายสัปดาห์นี้ 15 ชม. อ่านไปแล้ว '+p+'%';$('#skb').style.width=p+'%'
+}
+rOpt();render();go(st.get('ob',0)?'tmr':'onb');
+</script>
+</body>
+</html>
